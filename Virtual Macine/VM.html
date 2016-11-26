@@ -1,0 +1,50 @@
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>VM</title>
+  <style type="text/css">
+   .codeWindow { 
+    width: 500px; 
+    height: 500px; 
+    background: #00007a;
+    padding: 5px;
+    border: solid 2px #AAAAAA; 
+    color: #EEEEEE;
+    font-family: Courier new, sans-serif;
+    font-weight:bold;
+    float: left;
+   }
+   .procElem { 
+    width: 70px;
+    background: #00007a;
+    border: solid 2px #AAAAAA;
+    color: #00AAAA;
+    font-family:sans-serif;
+    font-weight:bold;
+    float: left;
+   }
+  </style> 
+  </head>
+<body style="background-color: #00007a">
+  <form action="form.php" onsubmit="sumbitCode();return false;">
+    <textarea id = "codeWindow", class="codeWindow"></textarea>
+    <p><input type="submit" value="Ввод"></p>
+  </form>
+
+  <div id = "r0" class="procElem">r0: 0</div>
+  <div id = "r1" class="procElem">r1: 0</div>
+  <div id = "r2" class="procElem">r2: 0</div>
+  <div id = "r3" class="procElem">r3: 0</div>
+  <div id = "r4" class="procElem">r4: 0</div>
+  <div id = "r5" class="procElem">r5: 0</div>
+
+  <div id = "ERF" class="procElem">ERF: 0</div>
+  <div id = "ICF" class="procElem">ICF: 0</div>
+  <div id = "CVF" class="procElem">CVF: 0</div>
+
+  <script type="text/javascript" src="memory.js"></script> 
+  <script type="text/javascript" src="proc.js"></script>
+  <script type="text/javascript" src="machine.js"></script>
+
+ </body>
+</html>
