@@ -20,26 +20,30 @@ Machine.prototype.isSyntaxCorrect = function(string)
 	var regEx1 = /(^((\w*: \w{3})|(\w{3}))) r\d{1,2},r\d{1,2};\w*/;
 	var regEx2 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2});\w*/;
 	var regEx3 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2},\d+);\w*/;
+	var regEx4 = /(^((\w*: \w{3})|(\w{3}))) (\w+);\w*/;
 	var regEx5 = /(;(\w*.)*)$/;
-	
-	console.log(string);
+	var regEx6 = /(^((\w*: EXT)|(EXT)));\w*/;
+		
+	console.log("Syntax check: " + string);
 
-	console.log(regEx1.test(string));
-	console.log(regEx2.test(string));
-	console.log(regEx3.test(string));
-	console.log(regEx5.test(string));
+	console.log("regEx check 1: " + regEx1.test(string));
+	console.log("regEx check 2: " + regEx2.test(string));
+	console.log("regEx check 3: " + regEx3.test(string));
+	console.log("regEx check 4: " + regEx4.test(string));
+	console.log("regEx check 5: " + regEx5.test(string));
+	console.log("regEx check 6: " + regEx6.test(string));
 	
 	if(!regEx5.test(string))//Если стрка не заканчивается ';'/';*comment*'
 		return false;
 
-	return ((regEx1.test(string) || regEx2.test(string) || regEx3.test(string)));
+	return ((regEx1.test(string) || regEx2.test(string) || regEx3.test(string)  || regEx4.test(string) || regEx6.test(string)));
 }
 
 Machine.prototype.checkCode = function()
 {
 	for(a in this.m.codeStrings){
 		if(!this.isSyntaxCorrect(this.m.codeStrings[a])){
-			alert("Syntax is incorrect! str: "+a);
+			alert("Syntax is incorrect! str: " + a);
 			return false;
 		}	
 	}
@@ -67,39 +71,67 @@ Machine.prototype.refreshFlags = function()
 {	
 	for (var key in this.p.flags) {
 			var flag = document.getElementById(key);
-			console.log("Flags: "+key);
 			flag.innerHTML = key + " : " +this.p.flags[key];
 	}
+}
+
+Machine.prototype.refreshIP = function()
+{
+	var IP = document.getElementById("IP");
+	IP.innerHTML = "IP : " + this.p.IP;
 }
 
 Machine.prototype.refreshInf = function()
 {
 	this.refreshRegs();
 	this.refreshFlags();
+	this.refreshIP();
 }
 
+Machine.prototype.step = function()
+{
+	var memStr = [];
+	this.p.getLabels(this.m.codeStrings);
+	memStr = this.p.readMemory(this.m.codeStrings);
+	this.p.step(memStr[0]);
+    this.refreshInf();
+}
 
+//По-моему строка, на котрой стоит метка не выполняется при переходе
 Machine.prototype.start = function()
 {
 	var memStr = [];
-
+	this.p.getLabels(this.m.codeStrings);
 	//Пока не было ошибки в процессоре и не дошли до конца кода
 	while((this.p.flags["ERF"] == false) && (this.p.IP < this.m.codeStrings.length)){ 
-		memStr = this.p.readMemory(this.m.codeStrings);
-		this.p.step(memStr[0]);
-		this.refreshInf();
+		VM.step();
 	}
-	return;
 }
+
+var VM = new Machine();
 
 function sumbitCode()
 {
 	var codeWin = document.getElementById("codeWindow");
-	var VM = new Machine();
 	VM.init(codeWin.value);
-	if(VM.makeCheckings() == 0)
-		VM.start();
+	if(VM.makeCheckings() != 0)
+		return;
 }
 
+function machineStep()
+{
+	// //если не было ошибки в процессоре и не дошли до конца кода
+	if((VM.p.flags["ERF"] == false) && (VM.p.IP < VM.m.codeStrings.length)){ 
+		VM.step();
+	}
+}
+
+function machineStart()
+{
+	// //если не было ошибки в процессоре и не дошли до конца кода
+	while((VM.p.flags["ERF"] == false) && (VM.p.IP < VM.m.codeStrings.length)){ 
+		VM.step();
+	}
+}
 
 

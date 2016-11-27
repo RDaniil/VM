@@ -3,6 +3,16 @@
   <meta charset="utf-8">
   <title>VM</title>
   <style type="text/css">
+  .instructionsBlock { 
+    /*width: 650px; */
+    padding: 5px;
+    padding-right: 20px; 
+    border: solid 2px #fced3f;
+    color: #EEEEEE;
+    font-family: Courier new, sans-serif;
+
+    position: top;
+   }
    .codeWindow { 
     width: 500px; 
     height: 500px; 
@@ -23,26 +33,52 @@
     font-weight:bold;
     float: left;
    }
+   .buttons { 
+    color: #00AAAA;
+    background: #AAAAAA;
+    font-weight:bold;
+   }
   </style> 
   </head>
 <body style="background-color: #00007a">
-  <form action="form.php" onsubmit="sumbitCode();return false;">
+  <form action="sumbit.php" onsubmit="sumbitCode();return false;">
     <textarea id = "codeWindow", class="codeWindow"></textarea>
-    <p><input type="submit" value="Ввод"></p>
+    <p><input class= "buttons" type="submit" value="Ввод"></p>
   </form>
 
+  <form action="step.php" onsubmit="machineStep();return false;">
+    <p><input class= "buttons" type="submit" value="Шаг"></p>
+  </form>
+
+  <form action="start.php" onsubmit="machineStart();return false;">
+    <p><input class= "buttons" type="submit" value="Старт"></p>
+  </form>
+
+   <div class="instructionsBlock"><em> Инструкция:</em> 1)Ввод кода. 2)Шаг/Старт. 
+  Синтаксис команд: label:_INSTRUCTION_op1,op2;comment - для бинарных команд(Можно использовать без метки).
+  Для унарных: label:_INSTRUCTION_op1;comment (Так же можно использовать без метки). <em>Список и описание команд:</em> 
+  <strong>"MOV"</strong> - MOVE; <strong>"ADD"</strong> - ADD; <strong>"SUB"</strong> - SUBSTRACT; <strong>"MUL"</strong> - MULTIPLY; <strong>"DIV"</strong> - DIVIDE; <strong>"RDV"</strong> - REST of DIVIIDING; <strong>"DEC"</strong> - DECREMENT; <strong>"INC"</strong> - INCREMENT; <strong>"NEG"</strong> - to NEGATIVE; <strong>"POS"</strong> - to POSITIVE; <strong>"CMP"</strong> - COMPARE ; <strong>"JMP"</strong> - JUMP to; <strong>"JPU"</strong> - JUMP if UNEQUAL; <strong>"JPE"</strong> - JUMP if EQUAL; <strong>"JPL"</strong> - JUMP if LESSER; <strong>"JPG"</strong> - JUMP if GREA; 
+  <strong>"EXT"</strong>//EXIT</div>
+
   <div id = "r0" class="procElem">r0: 0</div>
-  <div id = "r1" class="procElem">r1: 0</div>
+  <div id = "r1" class="procElem">r1: 0</div> 
   <div id = "r2" class="procElem">r2: 0</div>
   <div id = "r3" class="procElem">r3: 0</div>
   <div id = "r4" class="procElem">r4: 0</div>
   <div id = "r5" class="procElem">r5: 0</div>
 
-  <div id = "ERF" class="procElem">ERF: 0</div>
-  <div id = "ICF" class="procElem">ICF: 0</div>
-  <div id = "CVF" class="procElem">CVF: 0</div>
+  <div id = "ERF"   class="procElem">ERF: 0</div>
+  <div id = "CMPUF" class="procElem">CMPUF: 0</div>
+  <div id = "CMPEF" class="procElem">CMPEF: 0</div>
+  <div id = "CMPLF" class="procElem">CMPLF: 0</div>
+  <div id = "CMPGF" class="procElem">CMPGF: 0</div>
+
+  <div id = "IP"    class="procElem">IP: 0</div>
+
+
 
   <script type="text/javascript" src="memory.js"></script> 
+  <script type="text/javascript" src="procINSTR.js"></script>
   <script type="text/javascript" src="proc.js"></script>
   <script type="text/javascript" src="machine.js"></script>
 

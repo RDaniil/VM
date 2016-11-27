@@ -4,13 +4,12 @@ Memory = function(){
 }
 
 Memory.prototype.initMemory = function(code){
-	this.codeStrings = code.split("\n");
-	//Костыль. Если код закончен переносом строки, надо его удалить
-	//именно вот атк я это и сделаю, пожалуй
-	if(this.codeStrings[this.codeStrings.length] == null)
-		this.codeStrings.pop();
+	var codeStr = code.split("\n");
+	//Удаление пустых строк(что бы можно было делать много переносов)
+	this.codeStrings = codeStr.filter( function(item){ return item != ''; } );
+	
 	for(a in this.codeStrings){
-		console.log(this.codeStrings[a]);
+		console.log("Memory str " + a + " is " + "'" + this.codeStrings[a] + "'");
 	}
 	var code = document.getElementById("codeWindow");
 			console.log(code.innerHTML);
