@@ -10,7 +10,6 @@
     color: #EEEEEE;
     font-size: 14px;
     font-family: sans-serif;
-
     position: top;
    }
    .codeWindow { 
@@ -41,18 +40,11 @@
   </style> 
   </head>
 <body style="background-color: #00007a">
-  <form action="sumbit.php" onsubmit="sumbitCode();return false;">
-    <textarea id = "codeWindow", class="codeWindow"></textarea>
-    <p><input class= "buttons" type="submit" value="Ввод"></p>
-  </form>
 
-  <form action="step.php" onsubmit="machineStep();return false;">
-    <p><input class= "buttons" type="submit" value="Шаг"></p>
-  </form>
-
-  <form action="start.php" onsubmit="machineStart();return false;">
-    <p><input class= "buttons" type="submit" value="Старт"></p>
-  </form>
+  <textarea id = "codeWindow", class="codeWindow"></textarea>
+  <button class = "buttons" onclick="sumbitCode()">Ввод</button>
+  <button class = "buttons" onclick="machineStep()">Шаг</button>
+  <button class = "buttons" onclick="machineStart()">Старт</button>
 
    <div class="instructionsBlock">
   <b>Справка:</b>
@@ -64,14 +56,21 @@
   Унарные инструкции: инструкция_оператор1;комментарий <br>
   Комментарии не обязательны. Так же можно использовать метки: метка:_инструкция_...;комментарий. Метки не должны содержать пробелов, между операндами так же не должно быть пробелов.
 
-  <p><em>Список и описание инструкций:</em> </p>
-    <em><b>Бинарные:</b></em> <b>"MOV"</b> - положить значение в регистр, <b>"CMP"</b> - Сравнение левого операнда с правым(Результаты используются в операторах перехода см.унарные инструкции переходы);<br>След. инструкции производят операцю над операндами и кладут результат в левый операнд (должен быть регистр): <b>"ADD"</b> - сложение; <b>"SUB"</b> - вычитание; <b>"MUL"</b> - умножение; <b>"DIV"</b> - деление; <b>"RDV"</b> - остаток от деления;
+  <p><em>Список и описание инструкций:</em>(можно писать маленькими буквами) </p>
+  <em><b>Бинарные:</b></em> <b>"MOV"</b> - положить значение в регистр, <b>"CMP"</b> - Сравнение левого операнда с правым(Результаты используются в операторах перехода см.унарные инструкции переходы);<br>След. инструкции производят операцю над операндами и кладут результат в левый операнд (должен быть регистр): <b>"ADD"</b> - сложение; <b>"SUB"</b> - вычитание; <b>"MUL"</b> - умножение; <b>"DIV"</b> - деление; <b>"RDV"</b> - остаток от деления;
+  
   <br>
-  <em><b>Унарные:</b></em><br>
+
+  <em><b>Унарные:</b></em>
+
+  <br>
+
   След. инструкции проводятся над регистром: <b>"DEC"</b> - уменьшить на 1; <b>"INC"</b> - увеличть на 1; <b>"NEG"</b> - сделать отрицательным; <b>"POS"</b> - сделать положительным;<br>
   След. инструкции проводятся над метками, на основе результата команды CMP : <b>"JMP"</b> - Безусловный переход к метке; <b>"JPU"</b> - переход если неравны; <b>"JPE"</b> - переход если равны; <b>"JPL"</b> - переход если меньше; <b>"JPG"</b> - переход если больше; 
+  
   <br>
-    <b><em>Специальные(Без аргументов):</b></em>  <b>"EXT"</b> выход из программы   
+
+  <b><em>Специальные(Без аргументов):</b></em>  <b>"EXT"</b> выход из программы   
 
   </div>
 
@@ -89,8 +88,6 @@
   <div id = "CMPGF" class="procElem">CMPGF: 0</div>
 
   <div id = "IP"    class="procElem">IP: 0</div>
-
-
 
   <script type="text/javascript" src="memory.js"></script> 
   <script type="text/javascript" src="procINSTR.js"></script>
