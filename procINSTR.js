@@ -40,6 +40,9 @@ function DIV(operators){
 function RDV(operators){
 	return operators[0] % operators[1];
 }
+function MOV(operators){
+	return operators[1];
+}
 
 //UnaryInstructions
 function INC(operators){
