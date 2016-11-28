@@ -2,7 +2,7 @@ Proc = function(){
 	this.flags = [];
 	this.regsVal = [];
 	this.regsList = [];
-	this.IP = 0;
+	this.IP;
 	this.labels = [];
 	this.instrList = [];
 }
@@ -179,7 +179,6 @@ Proc.prototype.initInstructionList = function()
 	this.instrList.push("JPG");//JUMP if GREATER
 
 	this.instrList.push("EXT");//EXIT
-
 }
 
 Proc.prototype.initRegsisters = function(nRegisters)
@@ -232,7 +231,14 @@ Proc.prototype.initInstructions = function(nRegisters)
 	Proc.prototype.procJPE = jumpInstrCurry(JPE);
 	Proc.prototype.procJPL = jumpInstrCurry(JPL);
 	Proc.prototype.procJPG = jumpInstrCurry(JPG);
+}
 
+Proc.prototype.resetRegs = function()
+{
+	for (var i = 0; i < this.regsList.length; i++) {
+		var reg = "r" + i; //Создаются регистры видa r1, r2..., ri
+		this.regsVal[reg] = 0;
+	}
 }
 
 Proc.prototype.initProc = function(nRegisters)
@@ -241,6 +247,7 @@ Proc.prototype.initProc = function(nRegisters)
 	this.initFlags();
 	this.initInstructionList();
 	this.initInstructions();
+	this.IP = 0;
 }
 
 Proc.prototype.getLabels = function(codeStrings)
@@ -273,7 +280,7 @@ Proc.prototype.readMemory = function(memory)
 Proc.prototype.applyInstr = function(instr, OpStr)
 {
 	//Маленький костыль, но сплайс возвращает массив, поэтоу так
-	var instruction = instr[0];
+	var instruction = instr[0].toUpperCase();
 
 	if(!this.instrList.some( function(item){ return item == instruction; } )){ //Определена ли передаваемая инструкция
 		alert("Instruction is not defined! "+instruction);
@@ -286,7 +293,7 @@ Proc.prototype.applyInstr = function(instr, OpStr)
 		var arrOP = OpStr[0].split(',');//Операторы разделены запятой
 		console.log("IP: " + this.IP + " Instr: " + instruction+ " operands: " + arrOP);
 	}
-	switch(instruction){
+	switch(instruction.toUpperCase()){
 		case "ADD":
 			this.procADD(arrOP);
 			this.IP++;
@@ -366,9 +373,9 @@ Proc.prototype.applyInstr = function(instr, OpStr)
 Proc.prototype.executeInstr = function(memStr)
 {
 	var arrOfInstr = memStr.split(" ");
-	var isInstrDefined = this.instrList.some( function(item){ return item == arrOfInstr[0]; } )
+	var isInstrDefined = this.instrList.some( function(item){ return item == arrOfInstr[0].toUpperCase(); } )
 	if(!isInstrDefined){//Если первая инструкция не определенная команда, то это должна быть метка
-		console.log("Deleted : " + arrOfInstr[0]);
+		console.log("Deleted label: " + arrOfInstr[0]);
 		arrOfInstr.splice(0,1);//Первый эл.(метка в этом случае) выбрасывается
 	}
 	/*На этом этапе массив инструкий должен состоять только из
@@ -380,7 +387,6 @@ Proc.prototype.executeInstr = function(memStr)
 
 Proc.prototype.step = function(memStr)
 {
-	//console.log("STEP " + memStr);
 	this.executeInstr(memStr);
 }
 
