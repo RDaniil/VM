@@ -118,7 +118,7 @@ function sumbitCode()
 
 function machineStep()
 {
-	// //если не было ошибки в процессоре и не дошли до конца кода
+	//если не было ошибки в процессоре и не дошли до конца кода
 	if((VM.p.flags["ERF"] == false) && (VM.p.IP < VM.m.codeStrings.length)){ 
 		VM.step();
 	}
@@ -128,7 +128,7 @@ function machineStart()
 {
 	VM.p.resetRegs();
 	VM.p.IP = 0;
-	// //если не было ошибки в процессоре и не дошли до конца кода
+	//если не было ошибки в процессоре и не дошли до конца кода
 	while((VM.p.flags["ERF"] == false) && (VM.p.IP < VM.m.codeStrings.length)){ 
 		VM.step();
 	}

@@ -213,6 +213,7 @@ Proc.prototype.initInstructions = function(nRegisters)
 	Proc.prototype.procMUL = binInstrCurry(MUL);
 	Proc.prototype.procDIV = binInstrCurry(DIV);
 	Proc.prototype.procRDV = binInstrCurry(RDV);
+	Proc.prototype.procMOV = binInstrCurry(MOV);
 
 	//null потому что метки не нужны в этих операциях
 	var unaryInstrCurry = procINSTR(null)(this.flags)(this.regsVal)(procUnaryInstr);
