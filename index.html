@@ -4,18 +4,18 @@
   <title>VM</title>
   <style type="text/css">
   .instructionsBlock { 
-    /*width: 650px; */
     padding: 5px;
     padding-right: 20px; 
     border: solid 2px #fced3f;
     color: #EEEEEE;
-    font-family: Courier new, sans-serif;
+    font-size: 14px;
+    font-family: sans-serif;
 
     position: top;
    }
    .codeWindow { 
-    width: 500px; 
-    height: 500px; 
+    width: 400px; 
+    height: 540px; 
     background: #00007a;
     padding: 5px;
     border: solid 2px #AAAAAA; 
@@ -54,11 +54,26 @@
     <p><input class= "buttons" type="submit" value="Старт"></p>
   </form>
 
-   <div class="instructionsBlock"><em> Инструкция:</em> 1)Ввод кода. 2)Шаг/Старт. 
-  Синтаксис команд: label:_INSTRUCTION_op1,op2;comment - для бинарных команд(Можно использовать без метки).
-  Для унарных: label:_INSTRUCTION_op1;comment (Так же можно использовать без метки). <em>Список и описание команд:</em> 
-  <strong>"MOV"</strong> - MOVE; <strong>"ADD"</strong> - ADD; <strong>"SUB"</strong> - SUBSTRACT; <strong>"MUL"</strong> - MULTIPLY; <strong>"DIV"</strong> - DIVIDE; <strong>"RDV"</strong> - REST of DIVIIDING; <strong>"DEC"</strong> - DECREMENT; <strong>"INC"</strong> - INCREMENT; <strong>"NEG"</strong> - to NEGATIVE; <strong>"POS"</strong> - to POSITIVE; <strong>"CMP"</strong> - COMPARE ; <strong>"JMP"</strong> - JUMP to; <strong>"JPU"</strong> - JUMP if UNEQUAL; <strong>"JPE"</strong> - JUMP if EQUAL; <strong>"JPL"</strong> - JUMP if LESSER; <strong>"JPG"</strong> - JUMP if GREA; 
-  <strong>"EXT"</strong>//EXIT</div>
+   <div class="instructionsBlock">
+  <b>Справка:</b>
+  <p><em>Интерфейс:</em></p>
+  Окно для ввода кода (слева). Ввод - занести код в память. Шаг - построчно выполнять команды. Старт - выполнить весь код сразу.
+
+  <p>Синтаксис команд:</p> 
+  Бинарные инструкции: инструкция_оператор1,оператор2;комментарий<br>
+  Унарные инструкции: инструкция_оператор1;комментарий <br>
+  Комментарии не обязательны. Так же можно использовать метки: метка:_инструкция_...;комментарий. Метки не должны содержать пробелов, между операндами так же не должно быть пробелов.
+
+  <p><em>Список и описание инструкций:</em> </p>
+    <em><b>Бинарные:</b></em> <b>"MOV"</b> - положить значение в регистр, <b>"CMP"</b> - Сравнение левого операнда с правым(Результаты используются в операторах перехода см.унарные инструкции переходы);<br>След. инструкции производят операцю над операндами и кладут результат в левый операнд (должен быть регистр): <b>"ADD"</b> - сложение; <b>"SUB"</b> - вычитание; <b>"MUL"</b> - умножение; <b>"DIV"</b> - деление; <b>"RDV"</b> - остаток от деления;
+  <br>
+  <em><b>Унарные:</b></em><br>
+  След. инструкции проводятся над регистром: <b>"DEC"</b> - уменьшить на 1; <b>"INC"</b> - увеличть на 1; <b>"NEG"</b> - сделать отрицательным; <b>"POS"</b> - сделать положительным;<br>
+  След. инструкции проводятся над метками, на основе результата команды CMP : <b>"JMP"</b> - Безусловный переход к метке; <b>"JPU"</b> - переход если неравны; <b>"JPE"</b> - переход если равны; <b>"JPL"</b> - переход если меньше; <b>"JPG"</b> - переход если больше; 
+  <br>
+    <b><em>Специальные(Без аргументов):</b></em>  <b>"EXT"</b> выход из программы   
+
+  </div>
 
   <div id = "r0" class="procElem">r0: 0</div>
   <div id = "r1" class="procElem">r1: 0</div> 

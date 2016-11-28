@@ -1,5 +1,3 @@
-//var code = "lable: MOV r1,10;\nMOV r3,2;\nMUL r1,r3;\n";
-
 Machine = function(){
 	this.p = new Proc();
 	this.m = new Memory();
@@ -128,6 +126,8 @@ function machineStep()
 
 function machineStart()
 {
+	VM.p.resetRegs();
+	VM.p.IP = 0;
 	// //если не было ошибки в процессоре и не дошли до конца кода
 	while((VM.p.flags["ERF"] == false) && (VM.p.IP < VM.m.codeStrings.length)){ 
 		VM.step();
