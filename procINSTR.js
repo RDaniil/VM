@@ -26,6 +26,7 @@ function CMP(ops){
 }
 //BinaryInstructions
 function ADD(operators){
+	//Ипспользование NUmber, что бы было сложение чисел а не строк
 	return Number(operators[0]) + Number(operators[1]);
 }
 function SUB(operators){
@@ -46,7 +47,7 @@ function MOV(operators){
 
 //UnaryInstructions
 function INC(operators){
-	return operators[0] + 1;
+	return Number(operators[0]) + 1;
 }
 function DEC(operators){
 	return operators[0] - 1;
