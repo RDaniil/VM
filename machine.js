@@ -16,9 +16,9 @@ Machine.prototype.init = function(code)
 Machine.prototype.isSyntaxCorrect = function(string)
 {
 	var regEx1 = /(^((\w*: \w{3})|(\w{3}))) r\d{1,2},r\d{1,2};\w*/;
-	var regEx2 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2});\w*/;
-	var regEx3 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2},\d+);\w*/;
-	var regEx4 = /(^((\w*: \w{3})|(\w{3}))) (\w+);\w*/;
+	var regEx2 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2});?\w*/;
+	var regEx3 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2},?\d+);\w*/;
+	var regEx4 = /(^((\w*: \w{3})|(\w{3}))) (\w+);?\w*/;
 	var regEx5 = /(;(\w*.)*)$/;
 	var regEx6 = /(^((\w*: EXT)|(EXT)));\w*/;
 		
