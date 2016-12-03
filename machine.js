@@ -14,48 +14,50 @@ Machine.prototype.init = function(code)
 
 //Don't look here pls
 //Returns true if syntax is fine
-Machine.prototype.isSyntaxCorrect = function(codeString)
+Machine.prototype.isSyntaxCorrect = function()
 {
-	//Всевозможные проверки на лишние пробелы/табуляции
-	var formatString = codeString.replace(/ *, */g,",");
-	formatString = formatString.replace(/ +/g," ");
-	formatString = formatString.replace(/^ +/g,"");
-	formatString = formatString.replace(/ +;/g,";");
+	for(string in this.m.codeStrings){
 
+		//Всевозможные проверки на лишние пробелы/табуляции
+		var formatString = this.m.codeStrings[string].replace(/ *, */g,",");
+		formatString = formatString.replace(/ +/g," ");
+		formatString = formatString.replace(/^ +/g,"");
+		formatString = formatString.replace(/ +;/g,";");
 
-	var regEx1 = /(^((\w*: \w{3})|(\w{3}))) r\d{1,2},r\d{1,2};\w*/;
-	var regEx2 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2});\w*/;
-	var regEx3 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2},[-]*\d+);\w*/;
-	var regEx4 = /(^((\w*: \w{3})|(\w{3}))) (\D+);\w*/;
-	var regEx5 = /(;(\w*.)*)$/;
-	var regEx6 = /(^((\w*: EXT)|(EXT)));\w*/;
+		this.m.codeStrings[string] = formatString;
+
+		var regEx1 = /(^((\w*: \w{3})|(\w{3}))) r\d{1,2},r\d{1,2};\w*/;
+		var regEx2 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2});\w*/;
+		var regEx3 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2},[-]*\d+);\w*/;
+		var regEx4 = /(^((\w*: \w{3})|(\w{3}))) (\D+);\w*/;
+		var regEx5 = /(;(\w*.)*)$/;
+		var regEx6 = /(^((\w*: EXT)|(EXT)));\w*/;
+			
+		console.log("Syntax check: " + this.m.codeStrings[string]);
+
+		console.log("regEx check 1: " + regEx1.test(formatString));
+		console.log("regEx check 2: " + regEx2.test(formatString));
+		console.log("regEx check 3: " + regEx3.test(formatString));
+		console.log("regEx check 4: " + regEx4.test(formatString));
+		console.log("regEx check 5: " + regEx5.test(formatString));
+		console.log("regEx check 6: " + regEx6.test(formatString));
 		
-	console.log("Syntax check: " + formatString);
+		if(!regEx5.test(formatString)){//Если стрка не заканчивается ';'/';*comment*'
+			alert("There is must be ';' at the end of the line "+ string + "!");
+			this.p.flags["ERF"] = true;
+			return false;
+		}
 
-	console.log("regEx check 1: " + regEx1.test(formatString));
-	console.log("regEx check 2: " + regEx2.test(formatString));
-	console.log("regEx check 3: " + regEx3.test(formatString));
-	console.log("regEx check 4: " + regEx4.test(formatString));
-	console.log("regEx check 5: " + regEx5.test(formatString));
-	console.log("regEx check 6: " + regEx6.test(formatString));
-	
-	if(!regEx5.test(formatString)){//Если стрка не заканчивается ';'/';*comment*'
-		alert("There is must be ';' at the end of the line!");
-		return false;
+		if(!((regEx1.test(formatString) || regEx2.test(formatString) || regEx3.test(formatString)  || regEx4.test(formatString) || regEx6.test(formatString)))){
+			this.p.flags["ERF"] = true;
+			return false;
+		}
 	}
-
-	return ((regEx1.test(formatString) || regEx2.test(formatString) || regEx3.test(formatString)  || regEx4.test(formatString) || regEx6.test(formatString)));
 }
 
 Machine.prototype.checkCode = function()
 {
-	for(a in this.m.codeStrings){
-		if(!this.isSyntaxCorrect(this.m.codeStrings[a])){
-			alert("Syntax is incorrect! str: " + a);
-			return false;
-		}	
-	}
-	return true;
+	return this.isSyntaxCorrect();
 }
 
 Machine.prototype.makeCheckings = function()
@@ -122,6 +124,18 @@ Machine.prototype.refreshInf = function()
 	this.refreshRegs();
 	this.refreshFlags();
 	this.refreshIPInf();
+}
+
+function pasteGCDAlg()
+{
+	var codeWin = document.getElementById("codeWindow");
+	codeWin.value = VM.m.GCDcode;
+}
+
+function pasteFactorialAlg()
+{
+	var codeWin = document.getElementById("codeWindow");
+	codeWin.value = VM.m.FactorialCode;
 }
 
 Machine.prototype.step = function()
