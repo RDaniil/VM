@@ -9,32 +9,42 @@ Machine.prototype.init = function(code)
 	this.numOfRegisters = 6; //При изменении числа регистров не забудь в хтмл заглянуть
 	this.p.initProc(this.numOfRegisters);
 	this.m.initMemory(code);
+	this.refreshRegs();
 }
 
 //Don't look here pls
 //Returns true if syntax is fine
-Machine.prototype.isSyntaxCorrect = function(string)
+Machine.prototype.isSyntaxCorrect = function(codeString)
 {
+	//Всевозможные проверки на лишние пробелы/табуляции
+	var formatString = codeString.replace(/ *, */g,",");
+	formatString = formatString.replace(/ +/g," ");
+	formatString = formatString.replace(/^ +/g,"");
+	formatString = formatString.replace(/ +;/g,";");
+
+
 	var regEx1 = /(^((\w*: \w{3})|(\w{3}))) r\d{1,2},r\d{1,2};\w*/;
-	var regEx2 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2});?\w*/;
-	var regEx3 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2},?\d+);\w*/;
-	var regEx4 = /(^((\w*: \w{3})|(\w{3}))) (\w+);?\w*/;
+	var regEx2 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2});\w*/;
+	var regEx3 = /(^((\w*: \w{3})|(\w{3}))) (r\d{1,2},[-]*\d+);\w*/;
+	var regEx4 = /(^((\w*: \w{3})|(\w{3}))) (\D+);\w*/;
 	var regEx5 = /(;(\w*.)*)$/;
 	var regEx6 = /(^((\w*: EXT)|(EXT)));\w*/;
 		
-	console.log("Syntax check: " + string);
+	console.log("Syntax check: " + formatString);
 
-	console.log("regEx check 1: " + regEx1.test(string));
-	console.log("regEx check 2: " + regEx2.test(string));
-	console.log("regEx check 3: " + regEx3.test(string));
-	console.log("regEx check 4: " + regEx4.test(string));
-	console.log("regEx check 5: " + regEx5.test(string));
-	console.log("regEx check 6: " + regEx6.test(string));
+	console.log("regEx check 1: " + regEx1.test(formatString));
+	console.log("regEx check 2: " + regEx2.test(formatString));
+	console.log("regEx check 3: " + regEx3.test(formatString));
+	console.log("regEx check 4: " + regEx4.test(formatString));
+	console.log("regEx check 5: " + regEx5.test(formatString));
+	console.log("regEx check 6: " + regEx6.test(formatString));
 	
-	if(!regEx5.test(string))//Если стрка не заканчивается ';'/';*comment*'
+	if(!regEx5.test(formatString)){//Если стрка не заканчивается ';'/';*comment*'
+		alert("There is must be ';' at the end of the line!");
 		return false;
+	}
 
-	return ((regEx1.test(string) || regEx2.test(string) || regEx3.test(string)  || regEx4.test(string) || regEx6.test(string)));
+	return ((regEx1.test(formatString) || regEx2.test(formatString) || regEx3.test(formatString)  || regEx4.test(formatString) || regEx6.test(formatString)));
 }
 
 Machine.prototype.checkCode = function()
@@ -61,7 +71,23 @@ Machine.prototype.refreshRegs = function()
 	for (var i = 0; i < this.numOfRegisters; i++) {
 		var reg = "r" + i; //Создаются регистры видa r1, r2..., ri
 			var r = document.getElementById(reg);
-			r.innerHTML = reg + " : " +this.p.regsVal[reg];
+			r.value = this.p.regsVal[reg];
+	}
+}
+
+Machine.prototype.getRegsVal = function()
+{	
+	for (var i = 0; i < this.numOfRegisters; i++) {
+		var reg = "r" + i; //Создаются регистры видa r1, r2..., ri
+		var r = document.getElementById(reg);
+		//Если в регистр пытаются пложить что-то кроме числа - ошибка
+		if(!isNaN(Number(r.value))){
+			this.p.regsVal[reg] = r.value;
+		}else{
+			alert("Error: Registers can only contain a number!!!");
+			this.p.flags["ERF"] = true;
+			return;
+		}
 	}
 }
 
@@ -73,22 +99,36 @@ Machine.prototype.refreshFlags = function()
 	}
 }
 
-Machine.prototype.refreshIP = function()
+Machine.prototype.refreshIPInf = function()
 {
 	var IP = document.getElementById("IP");
-	IP.innerHTML = "IP : " + this.p.IP;
+	IP.value = this.p.IP;
+}
+
+Machine.prototype.refreshIPVal = function()
+{
+	var IP = document.getElementById("IP");
+	if(!isNaN(IP.value)){
+		this.p.IP = IP.value;
+	}else{
+		alert("Error: IP can be only a number!!!");
+		this.p.flags["ERF"] = true;
+		return;
+	}
 }
 
 Machine.prototype.refreshInf = function()
 {
 	this.refreshRegs();
 	this.refreshFlags();
-	this.refreshIP();
+	this.refreshIPInf();
 }
 
 Machine.prototype.step = function()
 {
 	var memStr = [];
+	this.getRegsVal();
+	this.refreshIPVal();
 	this.p.getLabels(this.m.codeStrings);
 	memStr = this.p.readMemory(this.m.codeStrings);
 	this.p.step(memStr[0]);
@@ -112,6 +152,7 @@ function sumbitCode()
 {
 	var codeWin = document.getElementById("codeWindow");
 	VM.init(codeWin.value);
+	VM.refreshInf();
 	if(VM.makeCheckings() != 0)
 		return;
 }
@@ -128,6 +169,7 @@ function machineStart()
 {
 	VM.p.resetRegs();
 	VM.p.IP = 0;
+	VM.refreshInf();
 	//если не было ошибки в процессоре и не дошли до конца кода
 	while((VM.p.flags["ERF"] == false) && (VM.p.IP < VM.m.codeStrings.length)){ 
 		VM.step();
