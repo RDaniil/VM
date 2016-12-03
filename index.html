@@ -5,16 +5,18 @@
   <style type="text/css">
   .instructionsBlock { 
     padding: 5px;
+    width: 650px;
+    height: 480px;
     padding-right: 20px; 
     border: solid 2px #fced3f;
     color: #EEEEEE;
     font-size: 14px;
     font-family: sans-serif;
-    position: top;
+    float: right;
    }
    .codeWindow { 
     width: 400px; 
-    height: 540px; 
+    height: 500px; 
     background: #00007a;
     padding: 5px;
     border: solid 2px #AAAAAA; 
@@ -24,17 +26,22 @@
     float: left;
    }
    .procElem { 
-    width: 70px;
+    width: 100px;
+    height: 40px;
     background: #00007a;
     border: solid 2px #AAAAAA;
     color: #00AAAA;
     font-family:sans-serif;
     font-weight:bold;
-    float: left;
    }
    .buttons { 
-    color: #00AAAA;
+    color: #000000;
     background: #AAAAAA;
+    font-family: sans-serif;
+    font-weight:bold;
+   }
+    .regs { 
+    color: #CC1111;
     font-weight:bold;
    }
   </style> 
@@ -46,15 +53,15 @@
   <button class = "buttons" onclick="machineStep()">Шаг</button>
   <button class = "buttons" onclick="machineStart()">Старт</button>
 
-   <div class="instructionsBlock">
+  <div class="instructionsBlock">
   <b>Справка:</b>
   <p><em>Интерфейс:</em></p>
   Окно для ввода кода (слева). Ввод - занести код в память. Шаг - построчно выполнять команды. Старт - выполнить весь код сразу.
 
   <p>Синтаксис команд:</p> 
-  Бинарные инструкции: инструкция_оператор1,оператор2;комментарий<br>
-  Унарные инструкции: инструкция_оператор1;комментарий <br>
-  Комментарии не обязательны. Так же можно использовать метки: метка:_инструкция_...;комментарий. Метки не должны содержать пробелов, между операндами так же не должно быть пробелов.
+  Бинарные инструкции: <b>инструкция_оператор1,оператор2;</b> комментарий<br>
+  Унарные инструкции: <b>инструкция_оператор1;</b> комментарий <br>
+  Комментарии не обязательны. Строка обязательно должна заканчиваться символом "<b>;</b>".Так же можно использовать метки: <b>метка:_инструкция_...;</b>комментарий. Имена меток не должны содержать пробелов.
 
   <p><em>Список и описание инструкций:</em>(можно писать маленькими буквами) </p>
   <em><b>Бинарные:</b></em> <b>"MOV"</b> - положить значение в регистр, <b>"CMP"</b> - Сравнение левого операнда с правым(Результаты используются в операторах перехода см.унарные инструкции переходы);<br>След. инструкции производят операцю над операндами и кладут результат в левый операнд (должен быть регистр): <b>"ADD"</b> - сложение; <b>"SUB"</b> - вычитание; <b>"MUL"</b> - умножение; <b>"DIV"</b> - деление; <b>"RDV"</b> - остаток от деления;
@@ -74,12 +81,13 @@
 
   </div>
 
-  <div id = "r0" class="procElem">r0: 0</div>
-  <div id = "r1" class="procElem">r1: 0</div> 
-  <div id = "r2" class="procElem">r2: 0</div>
-  <div id = "r3" class="procElem">r3: 0</div>
-  <div id = "r4" class="procElem">r4: 0</div>
-  <div id = "r5" class="procElem">r5: 0</div>
+<table>
+
+  <tr>
+    <td><div style = "color: #AAAAAA; font-weight:bold">IP:</div></td> 
+    <td> <input id = "IP" class="procElem" value = 0> </td>
+    <td><div id = "ERF"   class="procElem">ERF : false</div></td> 
+  </tr>
 
   <div id = "ERF"   class="procElem">ERF: 0</div>
   <div id = "CMPUF" class="procElem">CMPUF: 0</div>
@@ -87,7 +95,7 @@
   <div id = "CMPLF" class="procElem">CMPLF: 0</div>
   <div id = "CMPGF" class="procElem">CMPGF: 0</div>
 
-  <div id = "IP"    class="procElem">IP: 0</div>
+</table>
 
   <script type="text/javascript" src="memory.js"></script> 
   <script type="text/javascript" src="procINSTR.js"></script>
